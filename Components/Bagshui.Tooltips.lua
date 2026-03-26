@@ -228,7 +228,14 @@ end
 ---@param expectedOwner table Frame that should own the tooltip.
 ---@param postDisplayCallback function?
 function Bagshui:ShowTooltipIfStillOwned(tooltip, expectedOwner, postDisplayCallback)
-	if tooltip and tooltip.IsOwned and tooltip:IsOwned(expectedOwner) then
+	if
+		tooltip and tooltip.IsOwned and tooltip:IsOwned(expectedOwner)
+		-- Avoid showing the tooltip if the mouse has left the owner (mouseIsOver
+		-- is explicitly false). This prevents delayed tooltips from appearing after
+		-- the cursor has already moved away, which can happen with addons like
+		-- consoleExperience that use a non-standard cursor.
+		and (not expectedOwner.bagshuiData or expectedOwner.bagshuiData.mouseIsOver ~= false)
+	then
 		tooltip:Show()
 		self:ShortenTooltipDelay(expectedOwner, true)  -- Update the time of last display for this tooltip group.
 		if postDisplayCallback then
