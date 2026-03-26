@@ -1192,11 +1192,6 @@ function Inventory:UiFrame_OnHide()
 	self:ClearEditModeCursor()
 	self:SetCharacter(Bagshui.currentCharacterId)
 
-	-- Ensure all tooltips are hidden when the window closes. This prevents
-	-- tooltips from persisting after the window is closed, which can happen
-	-- with addons like consoleExperience that use a non-standard cursor.
-	Bagshui:HideTooltips(nil, true)
-
 	_G.PlaySound(self.closeSound)
 
 	-- If there's a frame docked to this frame, close it too.
