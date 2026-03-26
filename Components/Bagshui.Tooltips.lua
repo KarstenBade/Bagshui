@@ -235,6 +235,11 @@ function Bagshui:ShowTooltipIfStillOwned(tooltip, expectedOwner, postDisplayCall
 		-- the cursor has already moved away, which can happen with addons like
 		-- consoleExperience that use a non-standard cursor.
 		and (not expectedOwner.bagshuiData or expectedOwner.bagshuiData.mouseIsOver ~= false)
+		-- As a further safeguard, use MouseIsOver() to verify the mouse is actually
+		-- still over the expected owner. This catches the remaining race condition
+		-- where OnLeave hasn't fired yet (so mouseIsOver is still true) but the
+		-- cursor has already moved away.
+		and _G.MouseIsOver(expectedOwner)
 	then
 		tooltip:Show()
 		self:ShortenTooltipDelay(expectedOwner, true)  -- Update the time of last display for this tooltip group.
